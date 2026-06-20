@@ -1,7 +1,7 @@
 // ============ Supabase Config ============
 const SUPABASE_URL = 'https://xzegwsfligtxkbudjdwg.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh6ZWd3c2ZsaWd0eGtidWRqZHdnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE5NDMyNDUsImV4cCI6MjA5NzUxOTI0NX0.2wcExs47kgecab6GoP-4cF1lAuRWj6-Dbd-gVq2CT4o';
-const ADMIN_EMAIL = 'admin@ziad.local'; // اسم المستخدم admin يُحوَّل لهذا الإيميل
+const ADMIN_EMAIL = 'ziad@ziad.local'; // اسم المستخدم admin يُحوَّل لهذا الإيميل
 const BUCKET = 'works';
 
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
