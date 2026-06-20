@@ -1,7 +1,7 @@
 // ============ Supabase Config ============
 const SUPABASE_URL = 'https://xzegwsfligtxkbudjdwg.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh6ZWd3c2ZsaWd0eGtidWRqZHdnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE5NDMyNDUsImV4cCI6MjA5NzUxOTI0NX0.2wcExs47kgecab6GoP-4cF1lAuRWj6-Dbd-gVq2CT4o';
-const ADMIN_EMAIL = 'ziad@ziad.local'; // اسم المستخدم admin يُحوَّل لهذا الإيميل
+const ADMIN_EMAIL = 'admin@ziad.local'; // اسم المستخدم admin يُحوَّل لهذا الإيميل
 const BUCKET = 'works';
 
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -28,8 +28,7 @@ function sendWhats(form){
   const text = `مرحبا زياد للطباعة 👋%0A` +
                `الاسم: ${data.get('name')}%0A` +
                `الهاتف: ${data.get('phone')}%0A` +
-               `الرسالة: ${data.get('msg')}` +
-               `نشكرك على التواصل معنا%0A`;
+               `الرسالة: ${data.get('msg')}`;
   window.open(`https://wa.me/963984871101?text=${text}`, '_blank');
 }
 window.sendWhats = sendWhats;
@@ -99,10 +98,11 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   const f = e.target;
   const username = f.username.value.trim();
-  const username = usernameInput.value.trim();
-const password = passwordInput.value.trim();
-
-const emailToSend = username === 'زياد' ? ADMIN_EMAIL : username;
+  const password = f.password.value;
+  const errBox = document.getElementById('loginError');
+  errBox.textContent = '';
+  // accept "admin" or full email
+  const email = username.includes('@') ? username : (username === 'admin' ? ADMIN_EMAIL : username + '@ziad.local');
   const { error } = await sb.auth.signInWithPassword({ email, password });
   if (error){ errBox.textContent = 'بيانات الدخول غير صحيحة.'; return; }
   closeModal('loginModal');
