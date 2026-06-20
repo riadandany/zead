@@ -99,11 +99,10 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   const f = e.target;
   const username = f.username.value.trim();
-  const password = f.password.value;
-  const errBox = document.getElementById('loginError');
-  errBox.textContent = '';
-  // accept "admin" or full email
-  const email = username.includes('@') ? username : (username === 'admin' ? ADMIN_EMAIL : username + '@ziad.local');
+  const username = usernameInput.value.trim();
+const password = passwordInput.value.trim();
+
+const emailToSend = username === 'زياد' ? ADMIN_EMAIL : username;
   const { error } = await sb.auth.signInWithPassword({ email, password });
   if (error){ errBox.textContent = 'بيانات الدخول غير صحيحة.'; return; }
   closeModal('loginModal');
