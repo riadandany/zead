@@ -28,7 +28,8 @@ function sendWhats(form){
   const text = `مرحبا زياد للطباعة 👋%0A` +
                `الاسم: ${data.get('name')}%0A` +
                `الهاتف: ${data.get('phone')}%0A` +
-               `الرسالة: ${data.get('msg')}`;
+               `الرسالة: ${data.get('msg')}`  +
+                `نشكرك على التواصل معنا%0A`;
   window.open(`https://wa.me/963984871101?text=${text}`, '_blank');
 }
 window.sendWhats = sendWhats;
