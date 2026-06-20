@@ -29,7 +29,7 @@ function sendWhats(form){
                `الاسم: ${data.get('name')}%0A` +
                `الهاتف: ${data.get('phone')}%0A` +
                `الرسالة: ${data.get('msg')}` +
-                `نشكرك على التواصل معنا%0A`;
+               `نشكرك على التواصل معنا%0A`;
   window.open(`https://wa.me/963984871101?text=${text}`, '_blank');
 }
 window.sendWhats = sendWhats;
