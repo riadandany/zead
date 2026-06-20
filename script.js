@@ -1,8 +1,10 @@
 // ============ Supabase Config ============
-const SUPABASE_URL = 'https://xzegwsfligtxkbudjdwg.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh6ZWd3c2ZsaWd0eGtidWRqZHdnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE5NDMyNDUsImV4cCI6MjA5NzUxOTI0NX0.2wcExs47kgecab6GoP-4cF1lAuRWj6-Dbd-gVq2CT4o';
-const ADMIN_EMAIL = 'admin@ziad.local'; // اسم المستخدم admin يُحوَّل لهذا الإيميل
+const SUPABASE_URL = 'https://nbkckaopgcopnpwkpfip.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5ia2NrYW9wZ2NvcG5wd2twZmlwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE5NTExMDYsImV4cCI6MjA5NzUyNzEwNn0.yrB6ckosDhGNe2qPR9HAdy6w-meLVF1JQ9vcEBS0ATk';
 const BUCKET = 'works';
+const AUTH_KEY = 'ziad_admin_logged_in';
+
+function isLoggedIn(){ return sessionStorage.getItem(AUTH_KEY) === '1'; }
 
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -30,8 +32,18 @@ function sendWhats(form){
                `الهاتف: ${data.get('phone')}%0A` +
                `الرسالة: ${data.get('msg')}`;
   window.open(`https://wa.me/963984871101?text=${text}`, '_blank');
+  showThankYou();
+  form.reset();
 }
 window.sendWhats = sendWhats;
+
+function showThankYou(){
+  const box = document.getElementById('thankYou');
+  if (!box) return;
+  box.classList.add('show');
+  clearTimeout(window.__thankTimer);
+  window.__thankTimer = setTimeout(() => box.classList.remove('show'), 5000);
+}
 
 // ============ Modals ============
 function openModal(id){ const m = document.getElementById(id); m.classList.add('open'); m.setAttribute('aria-hidden','false'); }
@@ -87,11 +99,10 @@ function renderGallery(items){
 
 function escapeHtml(s){ return (s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
-// ============ Auth ============
-document.getElementById('magicLoginBtn').addEventListener('click', async (e) => {
+// ============ Auth (جدول admin_user) ============
+document.getElementById('magicLoginBtn').addEventListener('click', (e) => {
   e.preventDefault();
-  const { data } = await sb.auth.getSession();
-  if (data.session) openModal('adminModal'); else openModal('loginModal');
+  if (isLoggedIn()) openModal('adminModal'); else openModal('loginModal');
 });
 
 document.getElementById('loginForm').addEventListener('submit', async (e) => {
@@ -101,17 +112,31 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
   const password = f.password.value;
   const errBox = document.getElementById('loginError');
   errBox.textContent = '';
-  // accept "admin" or full email
-  const email = username.includes('@') ? username : (username === 'admin' ? ADMIN_EMAIL : username + '@ziad.local');
-  const { error } = await sb.auth.signInWithPassword({ email, password });
-  if (error){ errBox.textContent = 'بيانات الدخول غير صحيحة.'; return; }
-  closeModal('loginModal');
-  openModal('adminModal');
-  f.reset();
+  const btn = f.querySelector('button[type=submit]');
+  btn.disabled = true; const oldTxt = btn.textContent; btn.textContent = 'جارٍ التحقق...';
+  try {
+    const { data, error } = await sb
+      .from('admin_user')
+      .select('id')
+      .eq('username', username)
+      .eq('password', password)
+      .maybeSingle();
+    if (error) throw error;
+    if (!data){ errBox.textContent = 'بيانات الدخول غير صحيحة.'; return; }
+    sessionStorage.setItem(AUTH_KEY, '1');
+    closeModal('loginModal');
+    openModal('adminModal');
+    f.reset();
+  } catch (err){
+    console.error(err);
+    errBox.textContent = 'تعذّر الاتصال بالسيرفر.';
+  } finally {
+    btn.disabled = false; btn.textContent = oldTxt;
+  }
 });
 
-document.getElementById('logoutBtn').addEventListener('click', async () => {
-  await sb.auth.signOut();
+document.getElementById('logoutBtn').addEventListener('click', () => {
+  sessionStorage.removeItem(AUTH_KEY);
   closeModal('adminModal');
 });
 

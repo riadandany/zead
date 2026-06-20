@@ -310,3 +310,25 @@ h3{font-family:'Cairo';font-size:1.25rem;font-weight:800;margin-bottom:10px}
   .admin-item{grid-template-columns:54px 1fr;grid-template-rows:auto auto}
   .admin-item-actions{grid-column:1/-1;justify-content:flex-end}
 }
+
+/* ===== Thank-you message ===== */
+.thank-you{
+  display:none;
+  align-items:center;
+  gap:12px;
+  margin-top:14px;
+  padding:14px 16px;
+  border-radius:14px;
+  background:linear-gradient(135deg, rgba(34,197,94,.15), rgba(16,185,129,.08));
+  border:1px solid rgba(34,197,94,.45);
+  color:#e7fff1;
+  animation:thankPop .4s ease;
+}
+.thank-you.show{ display:flex; }
+.thank-you-icon{ font-size:1.6rem; line-height:1; }
+.thank-you strong{ display:block; font-size:1.05rem; margin-bottom:2px; }
+.thank-you p{ margin:0; font-size:.9rem; opacity:.85; }
+@keyframes thankPop{
+  from{ opacity:0; transform:translateY(8px); }
+  to{ opacity:1; transform:translateY(0); }
+}

@@ -167,6 +167,13 @@
       <label>رقم الهاتف<input required name="phone" placeholder="0xxxxxxxxx"></label>
       <label>رسالتك<textarea required name="msg" rows="4" placeholder="اكتب طلبك..."></textarea></label>
       <button class="btn btn-primary" type="submit">إرسال عبر واتساب</button>
+      <div id="thankYou" class="thank-you" role="status" aria-live="polite">
+        <span class="thank-you-icon">✅</span>
+        <div>
+          <strong>شكراً لتواصلك معنا</strong>
+          <p>تم استلام رسالتك، وسيتم الرد عليك في أقرب وقت.</p>
+        </div>
+      </div>
     </form>
   </div>
 </section>
@@ -199,7 +206,7 @@
     <h3>✨ دخول سحري</h3>
     <p class="modal-sub">منطقة المطور — يرجى تسجيل الدخول.</p>
     <form id="loginForm">
-      <label>اسم المستخدم<input required name="username" placeholder="admin" autocomplete="username"></label>
+      <label>اسم المستخدم<input required name="username" placeholder="زياد" autocomplete="username"></label>
       <label>كلمة المرور<input required type="password" name="password" placeholder="••••" autocomplete="current-password"></label>
       <div id="loginError" class="form-error"></div>
       <button type="submit" class="btn btn-primary">دخول</button>
